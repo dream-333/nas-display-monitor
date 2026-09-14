@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh disk temperatures every minute
+
+[Timer]
+OnBootSec=20s
+OnUnitInactiveSec=60s
+AccuracySec=2s
+Unit=nas-display-smart.service
+
+[Install]
+WantedBy=timers.target

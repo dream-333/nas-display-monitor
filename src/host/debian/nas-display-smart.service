@@ -1,0 +1,23 @@
+[Unit]
+Description=Read-only disk SMART temperature cache for NAS Display
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/python3 /usr/lib/nas-display-host/smart_cache.py
+RuntimeDirectory=nas-display-smart
+RuntimeDirectoryMode=0755
+RuntimeDirectoryPreserve=yes
+TimeoutStartSec=300
+UMask=0022
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX
+ReadWritePaths=/run/nas-display-smart
+Environment=PYTHONDONTWRITEBYTECODE=1

@@ -1,0 +1,39 @@
+[Unit]
+Description=Dream NAS Display driver-aware local fan broker
+PartOf=nas-display-host.service
+Before=nas-display-host.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+WatchdogSec=30
+WatchdogSignal=SIGKILL
+TimeoutStartSec=300
+User=root
+Group=nas-display-host
+ExecStart=/usr/bin/python3 -I /usr/lib/nas-display-host/fpk_fan.py
+Environment=NAS_DISPLAY_FAN_ACCOUNT=nas-display-host
+Environment=NAS_DISPLAY_FAN_STATE=/var/lib/nas-display-fan/active.json
+Environment=NAS_DISPLAY_FAN_SOCKET=/run/nas-display-fan/control.sock
+Environment=PYTHONDONTWRITEBYTECODE=1
+RuntimeDirectory=nas-display-fan
+RuntimeDirectoryMode=0755
+StateDirectory=nas-display-fan
+StateDirectoryMode=0700
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=300
+UMask=0077
+NoNewPrivileges=true
+CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_CHOWN
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX
+ReadWritePaths=/sys/devices
+
+[Install]
+WantedBy=multi-user.target

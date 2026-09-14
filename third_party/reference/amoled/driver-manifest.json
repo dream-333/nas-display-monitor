@@ -1,0 +1,32 @@
+[
+  {
+    "path": "boards/lilygo-t-amoled.json",
+    "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Display-S3-AMOLED/edd133335c9f7c38d1e9be2d0eb67371f1f6428e/boards/lilygo-t-amoled.json",
+    "sha256": "9dd229886ede0f0640f5f3a07f62f46ef95543d31749c66be7de9a5aa35c2261"
+  },
+  {
+    "path": "examples/TFT_eSPI_Sprite/TFT_eSPI_Sprite.ino",
+    "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Display-S3-AMOLED/edd133335c9f7c38d1e9be2d0eb67371f1f6428e/examples/TFT_eSPI_Sprite/TFT_eSPI_Sprite.ino",
+    "sha256": "f716ecf15412fad61f452bc607de53114e299d3c61c686169e77d65a83aeec03"
+  },
+  {
+    "path": "examples/TFT_eSPI_Sprite/pins_config.h",
+    "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Display-S3-AMOLED/edd133335c9f7c38d1e9be2d0eb67371f1f6428e/examples/TFT_eSPI_Sprite/pins_config.h",
+    "sha256": "fbb3eb5fb460d0c5fc764f9581957e5a3ca15f5c406e83b55bc9c22f658e4c8e"
+  },
+  {
+    "path": "examples/TFT_eSPI_Sprite/rm67162.cpp",
+    "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Display-S3-AMOLED/edd133335c9f7c38d1e9be2d0eb67371f1f6428e/examples/TFT_eSPI_Sprite/rm67162.cpp",
+    "sha256": "0c67cdcd84e082e08d76e8772b92083762472dcd69e6eeab48688d132a775a5e"
+  },
+  {
+    "path": "examples/TFT_eSPI_Sprite/rm67162.h",
+    "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Display-S3-AMOLED/edd133335c9f7c38d1e9be2d0eb67371f1f6428e/examples/TFT_eSPI_Sprite/rm67162.h",
+    "sha256": "43b43ed722fcf2f6711db5778979724e258ed74f09ab74fc188fa85be66386f4"
+  },
+  {
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Display-S3-AMOLED/edd133335c9f7c38d1e9be2d0eb67371f1f6428e/LICENSE",
+    "sha256": "c0aacbcf39b9a4a2c97edfe0fd2b1944bfe898c0002c970621e05c297b650e12"
+  }
+]

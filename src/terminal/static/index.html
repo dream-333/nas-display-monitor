@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>NAS Terminal</title>
+  <link rel="icon" href="/app/dream-terminal/static/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/app/dream-terminal/static/vendor/xterm.css">
+  <link rel="stylesheet" href="/app/dream-terminal/static/style.css">
+  <script defer src="/app/dream-terminal/static/vendor/xterm.js"></script>
+  <script defer src="/app/dream-terminal/static/vendor/addon-fit.js"></script>
+  <script defer src="/app/dream-terminal/static/app.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand"><img src="/app/dream-terminal/static/icon.svg" alt="" width="38" height="38"><div><strong>NAS Terminal</strong><small>让调试，随手可及。</small></div></div>
+    <span class="badge" id="state">尚未连接</span>
+  </header>
+  <main>
+    <section id="welcome" class="welcome">
+      <div class="intro"><span class="eyebrow">YOUR NAS, AT YOUR FINGERTIPS</span><h1>随时打开，<br>继续你的工作。</h1><p>在浏览器里连接这台 NAS。查看网络、检查服务，或运行你熟悉的 Linux 命令。</p><div class="features"><span>本机 SSH</span><span>手机也好用</span><span>无需新增外网端口</span></div></div>
+      <div class="card">
+        <form id="unlock-form">
+          <h2>解锁终端</h2><p>使用安装 NAS Terminal时设置的独立密码。</p>
+          <label for="password">终端密码</label><input id="password" type="password" required minlength="8" maxlength="128" autocomplete="current-password">
+          <button type="submit" class="primary">解锁 <span>→</span></button>
+        </form>
+        <form id="connect-form" hidden>
+          <h2>连接这台 NAS</h2><p>输入 NAS 用户名。连接后，在终端内输入该账户的 SSH 密码。</p>
+          <label for="username">NAS 用户名</label><input id="username" required maxlength="64" autocomplete="username" autocapitalize="none" spellcheck="false">
+          <button type="submit" class="primary">打开终端 <span>→</span></button>
+          <div id="old-sessions" hidden><p id="sessions-note" class="hint"></p><button id="close-others" type="button">关闭本账号旧连接</button></div>
+          <p class="hint">需要在飞牛设置中开启 SSH；仅连接本机，不需要将 SSH 端口开放到外网。</p>
+        </form>
+        <p id="error" class="error" role="alert"></p>
+      </div>
+    </section>
+    <section id="workspace" hidden>
+      <div class="terminal-head"><div><span class="dot"></span><strong id="connection">本机 SSH</strong></div><div class="actions"><button id="smaller" aria-label="缩小字体">A−</button><button id="larger" aria-label="放大字体">A+</button><button id="disconnect">断开</button><button id="lock">锁定</button></div></div>
+      <div id="terminal" aria-label="NAS 交互终端"></div>
+      <div id="notice" role="status"></div>
+      <nav class="keys" aria-label="终端快捷键">
+        <button data-key="esc">Esc</button><button data-key="tab">Tab</button><button id="ctrl" aria-pressed="false">Ctrl</button><button data-key="interrupt">Ctrl+C</button><button data-key="up">↑</button><button data-key="down">↓</button><button data-key="left">←</button><button data-key="right">→</button><button data-key="enter">Enter ↵</button><button id="paste">粘贴</button><button id="copy">复制选中</button><button id="diagnostics">检查命令</button>
+      </nav>
+    </section>
+  </main>
+  <footer><span>NAS Terminal · 1.0.2</span><span>闲置 15 分钟自动关闭连接 · 密码输入不回显</span></footer>
+  <dialog id="paste-dialog"><form method="dialog"><h2>粘贴到终端</h2><p>确认文本后发送。包含换行的命令可能立即执行。</p><textarea id="paste-text" rows="7" spellcheck="false" autocapitalize="none" placeholder="在这里长按粘贴"></textarea><div class="dialog-actions"><button value="cancel">取消</button><button id="paste-send" type="button" class="primary">发送到终端</button></div></form></dialog>
+  <dialog id="commands-dialog"><form method="dialog"><h2>只读检查命令</h2><p>选择后填入终端，按 Enter 执行。</p><div class="command-list"><button type="button" data-command="ipv6">IPv6 地址与默认路由</button><button type="button" data-command="ports">查看监听端口</button><button type="button" data-command="sensors">温度与风扇传感器</button><button type="button" data-command="services">NAS Display 服务状态</button></div><button value="close">关闭</button></form></dialog>
+</body>
+</html>

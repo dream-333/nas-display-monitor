@@ -1,0 +1,8 @@
+# Isolated SSH test-server dependencies only. Never included in the FPK.
+paramiko==4.0.0
+bcrypt==5.0.0
+cryptography==50.0.1
+invoke==3.0.3
+PyNaCl==1.6.2
+cffi==2.1.1
+pycparser==3.0

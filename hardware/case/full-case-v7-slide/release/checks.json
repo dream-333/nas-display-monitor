@@ -1,0 +1,75 @@
+{
+  "base": {
+    "bounds_mm": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        37.09,
+        68.782,
+        14.9
+      ]
+    ],
+    "volume_mm3": 10044.435470242048,
+    "watertight": true,
+    "solids": 1
+  },
+  "lid": {
+    "bounds_mm": [
+      [
+        0.0,
+        4.11987e-07,
+        0.0
+      ],
+      [
+        37.09,
+        68.782,
+        6.1
+      ]
+    ],
+    "volume_mm3": 3587.8890764828225,
+    "watertight": true,
+    "solids": 1
+  },
+  "lock": {
+    "bounds_mm": [
+      [
+        7.62939e-07,
+        -7.62939e-07,
+        -1.90735e-07
+      ],
+      [
+        37.69,
+        2.8,
+        2.6
+      ]
+    ],
+    "volume_mm3": 220.04266382800424,
+    "watertight": true,
+    "solids": 1
+  },
+  "lock_root_intentional_wedge_overlap_mm3": 0.17775435003619453,
+  "insertion_path": {
+    "axis": "Y, from USB end",
+    "from_mm": -70,
+    "to_mm": 0,
+    "step_mm": 1,
+    "poses": 71,
+    "result": "no positive-volume rigid intersections at sampled poses"
+  },
+  "restraint_checks_mm3": {
+    "lid_up_0.4": 13.823992950434103,
+    "lid_back_1_locked": 4.704017860411903,
+    "frame_up_0.3": 0.45000171661376953
+  },
+  "clearances_mm": {
+    "lid_to_glass": 0.4,
+    "button_to_modelled_frame": 0.4,
+    "rigid_frame_stop": 0.15,
+    "rail_vertical": 0.2,
+    "rail_wall_side": 0.2
+  },
+  "limits": "Simplified STEP static and 1mm sampled insertion checks, not continuous collision detection or structural simulation. Display flex outside PCB boundary excluded; actual board, flex, switches, fit and strength unverified."
+}

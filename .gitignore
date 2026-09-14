@@ -1,0 +1,22 @@
+.venv/
+.platformio/
+src/firmware/.pio/
+__pycache__/
+*.pyc
+src/collector/config.json
+.protocol-test
+
+.host-state/
+
+# Generated artifacts and local historical material
+.build/
+dist/*
+!dist/README.zh-CN.md
+!dist/CONTENTS.json
+archive/
+
+# Local editor state and diagnostics
+.vscode/
+.idea/
+.pytest_cache/
+*.egg-info/

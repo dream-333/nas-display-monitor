@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+case "$1" in
+    upgrade)
+        if [ -d /run/systemd/system ]; then
+            systemctl stop nas-display-fan.service
+        fi
+        ;;
+    remove|deconfigure)
+        if [ -d /run/systemd/system ]; then
+            systemctl stop nas-display-smart.timer nas-display-smart.service
+            systemctl disable nas-display-smart.timer
+            invoke-rc.d nas-display-host stop || exit $?
+            systemctl disable nas-display-host.service
+            systemctl stop nas-display-fan.service
+            systemctl disable nas-display-fan.service
+        fi
+        ;;
+esac

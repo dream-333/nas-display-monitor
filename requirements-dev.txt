@@ -1,0 +1,8 @@
+# Linux x86_64 / Python 3.12; application, package and browser verification.
+Flask==3.1.3
+waitress==3.0.2
+pyserial==3.5
+CairoSVG==2.9.1
+playwright==1.62.0
+platformio==6.1.18
+-r src/terminal/requirements-test.txt

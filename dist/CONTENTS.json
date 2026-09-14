@@ -1,0 +1,64 @@
+{
+  "host": "1.5.1",
+  "terminal": "1.0.2",
+  "firmware": "UI5.1",
+  "delivery_revision": 4,
+  "maintainer": "Dream",
+  "distributor": "Dream",
+  "artifacts": [
+    {
+      "file": "NAS-Display-1.5.1-r4-Delivery.zip",
+      "role": "安装、终端、屏幕升级和外壳完整交付",
+      "bytes": 14698614,
+      "sha256": "c0b7f0679c596333a398ca5ce2cad111394fc2988b86b25ee45ccd09fae15344"
+    },
+    {
+      "file": "NAS-Display-1.5.1-r4-Source.zip",
+      "role": "可继续开发的干净工程源码",
+      "bytes": 57744536,
+      "sha256": "5b3693459f310a09aad61eaf3808ea260bc33c20c305b94f10743db97205dcbe"
+    },
+    {
+      "file": "components/NAS-Display-fnOS-1.5.1-x86.fpk",
+      "role": "fnOS NAS Display",
+      "bytes": 2055940,
+      "sha256": "71ba03c4c5b9ed8d259cbd6faaa070aa83db7fd45cb15cc7c389535259316634"
+    },
+    {
+      "file": "components/nas-display-host_1.5.1_all.deb",
+      "role": "Debian NAS Display",
+      "bytes": 64032,
+      "sha256": "592a866d63b0d8b3f964e469812d0daa0f7534a06f78a98ee7f2bbe9e9df2c49"
+    },
+    {
+      "file": "components/NAS-Terminal-fnOS-1.0.2-x86.fpk",
+      "role": "独立 NAS Terminal",
+      "bytes": 736531,
+      "sha256": "425af72b304fd2225a1adb17bb88204018cbc16f7cbc65fb39996cd13682e393"
+    },
+    {
+      "file": "components/NAS-Display-AMOLED-UI5.1-firmware.bin",
+      "role": "AMOLED 应用镜像，仅 0x10000",
+      "bytes": 868624,
+      "sha256": "be9d76f183ee7a466370f1c2e7baf857644a81e288e48e6441a96334c4a140c9"
+    },
+    {
+      "file": "components/AMOLED-Full-Case-V7-Slide-Lock.zip",
+      "role": "V7 外壳",
+      "bytes": 437673,
+      "sha256": "b93cc53de5cb8e23db8f9a80b8d2c535cc134fb8d2443574003c68453c523694"
+    },
+    {
+      "file": "components/NAS-IT8613-Driver-Kit.zip",
+      "role": "IT8613 固定驱动源码",
+      "bytes": 72008,
+      "sha256": "033fe7949c55bb66e0ceb39e9b4a66afabf1855a02f4659762877f2236a77d36"
+    },
+    {
+      "file": "components/NAS-Display-icon.png",
+      "role": "应用图标",
+      "bytes": 47099,
+      "sha256": "180e963286f5bcc362c210207af3c835fa99521d995ef09d78b07c06939a204f"
+    }
+  ]
+}

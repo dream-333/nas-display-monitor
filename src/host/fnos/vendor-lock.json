@@ -1,0 +1,16 @@
+{
+  "fnpack": "54b97fa7b70968c4d05c79840f5daeff508957d0bb2062fdb0376d00d9615c93",
+  "smartmontools_7.3-1+b1_amd64.deb": "724cd3dd49dec76f6fb0297252aeb860db54716d131387493180209f54d68d51",
+  "smartmontools_7.3-1.debian.tar.xz": "b85be59f445005fb7f129565d000b87a17fb4df142aea8340a5bcde5b1d71cdb",
+  "smartmontools_7.3-1.dsc": "05408b39b18aecf7f4f54e268c64c05209ba9a67b0982853eac2e8cfda8865fe",
+  "smartmontools_7.3.orig.tar.xz": "d507f2c55fb2fb644ec9759bf188283e06381901cb337c622e3ea0e17b4ac01f",
+  "wheels/blinker-1.9.0-py3-none-any.whl": "ba0efaa9080b619ff2f3459d1d500c57bddea4a6b424b60a91141db6fd2f08bc",
+  "wheels/click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+  "wheels/flask-3.1.3-py3-none-any.whl": "f4bcbefc124291925f1a26446da31a5178f9483862233b23c0c96a20701f670c",
+  "wheels/itsdangerous-2.2.0-py3-none-any.whl": "c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef",
+  "wheels/jinja2-3.1.6-py3-none-any.whl": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67",
+  "wheels/markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl": "d6dd0be5b5b189d31db7cda48b91d7e0a9795f31430b7f271219ab30f1d3ac9d",
+  "wheels/pyserial-3.5-py2.py3-none-any.whl": "c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0",
+  "wheels/waitress-3.0.2-py3-none-any.whl": "c56d67fd6e87c2ee598b76abdd4e96cfad1f24cacdea5078d382b1f9d7b5ed2e",
+  "wheels/werkzeug-3.1.8-py3-none-any.whl": "63a77fb8892bf28ebc3178683445222aa500e48ebad5ec77b0ad80f8726b1f50"
+}

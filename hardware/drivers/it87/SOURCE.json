@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/frankcrawford/it87",
+  "commit": "a904dd88b295a1bd4eeb47af523d8fad1e566a9f",
+  "version": "nasdisplay-a904dd88",
+  "local_changes": "VERSION and dkms.conf pin build version; driver C source, compat.h and Makefile unchanged.",
+  "license": "GPL-2.0-or-later"
+}

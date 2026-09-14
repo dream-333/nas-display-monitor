@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+if [ "$1" = configure ]; then
+    if ! getent passwd nas-display-host >/dev/null; then
+        adduser --system --group --home /var/lib/nas-display-host --no-create-home --shell /usr/sbin/nologin nas-display-host
+    fi
+    install -d -m 0700 -o nas-display-host -g nas-display-host /var/lib/nas-display-host
+    if [ -d /run/systemd/system ]; then
+        systemctl daemon-reload
+        systemctl enable nas-display-fan.service
+        systemctl restart nas-display-fan.service
+        systemctl enable --now nas-display-smart.timer
+        systemctl start --no-block nas-display-smart.service
+        systemctl enable nas-display-host.service
+        if [ -f /var/lib/nas-display-host/auth.json ] && [ -f /var/lib/nas-display-host/config.json ]; then
+            invoke-rc.d nas-display-host restart || exit $?
+        fi
+    fi
+    echo 'NAS Display Host: run sudo nas-display-host setup to initialize the administrator password.'
+fi

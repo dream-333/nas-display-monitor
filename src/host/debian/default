@@ -1,0 +1,5 @@
+# Web management listens on the LAN; a password must be initialized locally first.
+NAS_DISPLAY_LISTEN=0.0.0.0
+NAS_DISPLAY_PORT=8787
+# Set to 1 only when the browser accesses this service through HTTPS.
+NAS_DISPLAY_SECURE_COOKIE=0

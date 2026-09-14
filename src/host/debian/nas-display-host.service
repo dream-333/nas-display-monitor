@@ -1,0 +1,39 @@
+[Unit]
+Description=NAS Display web management and sensor sender
+After=network.target
+Wants=nas-display-fan.service
+After=nas-display-fan.service
+ConditionPathExists=/var/lib/nas-display-host/auth.json
+ConditionPathExists=/var/lib/nas-display-host/config.json
+
+[Service]
+Type=simple
+User=nas-display-host
+Group=nas-display-host
+SupplementaryGroups=dialout
+# System-wide i915 PMU counters require perf access on restricted kernels.
+# Keep the service unprivileged; do not relax global perf_event_paranoid.
+CapabilityBoundingSet=CAP_PERFMON
+AmbientCapabilities=CAP_PERFMON
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=NAS_DISPLAY_FAN_SOCKET=/run/nas-display-fan/control.sock
+EnvironmentFile=-/etc/default/nas-display-host
+ExecStart=/usr/bin/nas-display-host serve
+Restart=on-failure
+RestartSec=5
+StateDirectory=nas-display-host
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target
