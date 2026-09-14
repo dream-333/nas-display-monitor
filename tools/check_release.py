@@ -29,6 +29,7 @@ def main():
             ('build_terminal_fpk.py', f'terminal-{TERMINAL_VERSION}-build.log'),
             ('package_it87_driver.py', 'driver-package-check.log'),
             ('package_case.py', 'case-package-check.log'),
+            ('package_firmware.py', 'first-flash-package-check.log'),
             ('verify_host_package.py', f'host-{HOST_VERSION}-package-check.log'),
             ('verify_host_fpk.py', f'fpk-{HOST_VERSION}-check.log'),
             ('package_release.py', f'release-{HOST_VERSION}-check.log'),

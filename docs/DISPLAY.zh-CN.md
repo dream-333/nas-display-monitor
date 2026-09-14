@@ -14,6 +14,10 @@
 
 Wi-Fi 使用局域网 UDP；通过现有配网设置与网页配置匹配屏幕 IP、端口和 token。不要把 token 作为通用默认密码对外分发。运行配置和配网凭据不进入源码包。
 
+## 全新屏幕首次烧录
+
+使用完整交付包的 `First-Flash/`，或独立 First-Flash ZIP。引导程序、分区表、OTA 初始化数据与应用已配齐；Windows 运行 `FIRST-FLASH.cmd`。首次烧录会清空配置，详细步骤见 [首次烧录说明](FIRST-FLASH.zh-CN.md)。
+
 ## 更新已有屏幕
 
 先暂停网页 USB 发送并关闭串口监视器。完整解压交付包后，在 Windows-x64 中运行 UPDATE.cmd，选择 COM 口；随包提供独立 esptool.exe，无需安装 Python。完成后恢复发送。

@@ -12,4 +12,6 @@
 
 编译和预览命令统一见 [构建说明](../../docs/BUILD.zh-CN.md)。构建输出位于 `.pio/`，预览位于工程根目录 `.build/previews/`；两者不进入源码交付包。
 
+全新设备步骤见 [首次烧录](../../docs/FIRST-FLASH.zh-CN.md)。`tools/package_firmware.py` 使用固定引导、分区、OTA 和应用生成完整包，`tools/flash/` 保存操作脚本。
+
 固定发布输入为工程根目录 `assets/UI5.1/`，重新编译不会自动替换它。预览使用示例数据，不能代替实机屏幕验收。

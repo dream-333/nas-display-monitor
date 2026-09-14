@@ -19,11 +19,11 @@ TERMINAL_VERSION = next(ast.literal_eval(n.value) for n in TERMINAL_TREE.body if
                         and any(isinstance(t, ast.Name) and t.id == 'VERSION' for t in n.targets))
 
 # Packaging revision does not change runtime application versions.
-DELIVERY_REVISION = 4
+DELIVERY_REVISION = 5
 BUNDLE_NAME = f'NAS-Display-{HOST_VERSION}-r{DELIVERY_REVISION}'
 COMPONENTS = DIST / 'components'
 USER_DOCS = ('INSTALL.zh-CN.md', 'SENSORS.zh-CN.md', 'FANS.zh-CN.md',
-             'DRIVERS.zh-CN.md', 'DISPLAY.zh-CN.md', 'TERMINAL.zh-CN.md', 'REMOTE-ACCESS.zh-CN.md',
+             'DRIVERS.zh-CN.md', 'DISPLAY.zh-CN.md', 'FIRST-FLASH.zh-CN.md', 'TERMINAL.zh-CN.md', 'REMOTE-ACCESS.zh-CN.md',
              'CHANGELOG.zh-CN.md', 'VALIDATION.zh-CN.md')
 
 def release_metadata():

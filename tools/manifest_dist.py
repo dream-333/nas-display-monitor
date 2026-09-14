@@ -2,6 +2,7 @@
 import hashlib
 import json
 import shutil
+from package_firmware import NAME as FIRST_FLASH_NAME, FACTORY
 from release_config import ROOT, DIST, HOST_VERSION, TERMINAL_VERSION, FIRMWARE_VERSION, BUNDLE_NAME, release_metadata
 
 
@@ -14,6 +15,8 @@ def main():
         f'NAS-Terminal-fnOS-{TERMINAL_VERSION}-x86.fpk': '独立 NAS Terminal',
         f'NAS-Display-AMOLED-{FIRMWARE_VERSION}-firmware.bin': 'AMOLED 应用镜像，仅 0x10000',
         'AMOLED-Full-Case-V7-Slide-Lock.zip': 'V7 外壳',
+        FIRST_FLASH_NAME+'.zip': 'AMOLED 全新设备首次烧录工具包，清空配置',
+        FACTORY: 'AMOLED 完整合并镜像，仅 0x0，首次烧录',
         'NAS-IT8613-Driver-Kit.zip': 'IT8613 固定驱动源码',
         'NAS-Display-icon.png': '应用图标',
     }

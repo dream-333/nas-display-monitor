@@ -16,12 +16,13 @@ NAS Display **@HOST_VERSION@** · NAS Terminal **@TERMINAL_VERSION@** · AMOLED 
 | fnOS 主机应用 | `fnOS/` | `Documentation/INSTALL.zh-CN.md` |
 | Debian / Ubuntu 主机应用 | `Debian/` | `Documentation/INSTALL.zh-CN.md` |
 | 可选网页 SSH 终端 | `Terminal/` | `Documentation/TERMINAL.zh-CN.md` |
+| 全新 AMOLED 屏幕首次烧录 | `First-Flash/` | `Documentation/FIRST-FLASH.zh-CN.md` |
 | 已有 AMOLED 屏幕的 Windows 升级工具 | `Windows-x64/` | `Documentation/DISPLAY.zh-CN.md` |
 | V7 外壳模型与打印说明 ZIP | `Mechanical/` | 解压模型 ZIP 内的 README |
 | 可选 IT8613 源码驱动工具包 | `Drivers/` | 驱动 ZIP 内的 README；自动准备见 `Documentation/DRIVERS.zh-CN.md` |
 | 屏幕预览与许可 | `Preview/`、`Licenses/` | 对应目录 |
 
-屏幕升级工具仅适用于已有本项目分区布局的 LILYGO T-Display-S3 AMOLED 非触摸版，不用于空白设备初始化。驱动工具包仅用于 IT8613；其他主板支持范围见驱动说明。
+屏幕仅支持 LILYGO T-Display-S3 AMOLED 非触摸版（16 MB Flash）。全新设备运行 `First-Flash/FIRST-FLASH.cmd`，会清空配置；已有设备运行 `Windows-x64/UPDATE.cmd`，保留配置。驱动工具包仅用于 IT8613；其他主板支持范围见驱动说明。
 
 ## 继续了解
 

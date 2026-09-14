@@ -2,39 +2,39 @@
   "host": "1.5.1",
   "terminal": "1.0.2",
   "firmware": "UI5.1",
-  "delivery_revision": 4,
+  "delivery_revision": 5,
   "maintainer": "Dream",
   "distributor": "Dream",
   "artifacts": [
     {
-      "file": "NAS-Display-1.5.1-r4-Delivery.zip",
+      "file": "NAS-Display-1.5.1-r5-Delivery.zip",
       "role": "安装、终端、屏幕升级和外壳完整交付",
-      "bytes": 14698614,
-      "sha256": "c0b7f0679c596333a398ca5ce2cad111394fc2988b86b25ee45ccd09fae15344"
+      "bytes": 26519695,
+      "sha256": "7fa1ebe04b652d71e8f2b15d264366d5cb202eb04c1ba6ff54d06fcef78a1c96"
     },
     {
-      "file": "NAS-Display-1.5.1-r4-Source.zip",
+      "file": "NAS-Display-1.5.1-r5-Source.zip",
       "role": "可继续开发的干净工程源码",
-      "bytes": 57744536,
-      "sha256": "5b3693459f310a09aad61eaf3808ea260bc33c20c305b94f10743db97205dcbe"
+      "bytes": 57783554,
+      "sha256": "56916d5f5a7b502cd3c4b90444aa15ab70aaeb9e849364bad54b66f4ace23a6d"
     },
     {
       "file": "components/NAS-Display-fnOS-1.5.1-x86.fpk",
       "role": "fnOS NAS Display",
-      "bytes": 2055940,
-      "sha256": "71ba03c4c5b9ed8d259cbd6faaa070aa83db7fd45cb15cc7c389535259316634"
+      "bytes": 2058103,
+      "sha256": "fe744f53fbfb8731917d8128e4d9b17be8e65cfbc8e2521d093eef438117a643"
     },
     {
       "file": "components/nas-display-host_1.5.1_all.deb",
       "role": "Debian NAS Display",
-      "bytes": 64032,
-      "sha256": "592a866d63b0d8b3f964e469812d0daa0f7534a06f78a98ee7f2bbe9e9df2c49"
+      "bytes": 65876,
+      "sha256": "bde6a0bd9d0f8c1b04b5f8a81342355cdd4a682ea277fe4e2b3ff7ac2ea2d116"
     },
     {
       "file": "components/NAS-Terminal-fnOS-1.0.2-x86.fpk",
       "role": "独立 NAS Terminal",
-      "bytes": 736531,
-      "sha256": "425af72b304fd2225a1adb17bb88204018cbc16f7cbc65fb39996cd13682e393"
+      "bytes": 736748,
+      "sha256": "c955811da0ffba99a942ea4e482ed170814d72d702e53160bb0461e7c470adac"
     },
     {
       "file": "components/NAS-Display-AMOLED-UI5.1-firmware.bin",
@@ -46,13 +46,25 @@
       "file": "components/AMOLED-Full-Case-V7-Slide-Lock.zip",
       "role": "V7 外壳",
       "bytes": 437673,
-      "sha256": "b93cc53de5cb8e23db8f9a80b8d2c535cc134fb8d2443574003c68453c523694"
+      "sha256": "eb9dff71b0e88bd0d18d3968c8f6cf01a81fece6ef5bbc0d069ead40402394ff"
+    },
+    {
+      "file": "components/NAS-Display-AMOLED-UI5.1-First-Flash-r5.zip",
+      "role": "AMOLED 全新设备首次烧录工具包，清空配置",
+      "bytes": 11811509,
+      "sha256": "3b3aabf21dcd5c53347f8a7df575ea320ea2db2932eda9fb323b94071fc44e64"
+    },
+    {
+      "file": "components/NAS-Display-AMOLED-UI5.1-factory.bin",
+      "role": "AMOLED 完整合并镜像，仅 0x0，首次烧录",
+      "bytes": 934160,
+      "sha256": "e65d33b3b87f5ce809407c1e971fad1ae82a3e4f9a8b5d3d422f6c75cde8b19d"
     },
     {
       "file": "components/NAS-IT8613-Driver-Kit.zip",
       "role": "IT8613 固定驱动源码",
       "bytes": 72008,
-      "sha256": "033fe7949c55bb66e0ceb39e9b4a66afabf1855a02f4659762877f2236a77d36"
+      "sha256": "584487eeb0d8b0cda58146a951daa13ae4b1278e770d1dee0ece106224cdc8b4"
     },
     {
       "file": "components/NAS-Display-icon.png",

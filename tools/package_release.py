@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
+from package_firmware import NAME as FIRST_FLASH_NAME, FACTORY
 
 ROOT=Path(__file__).resolve().parents[1]
 from release_config import DIST, ASSETS, HOST_VERSION, TERMINAL_VERSION, FIRMWARE_ID, FIRMWARE_VERSION, RELEASE_NOTES, LOGS, COMPONENTS, USER_DOCS, BUNDLE_NAME, release_metadata
@@ -33,6 +34,17 @@ def main():
         stage=Path(tmp)/NAME;stage.mkdir();win=stage/'Windows-x64';win.mkdir()
         def copy(source,target):
             dest=stage/target;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/source,dest)
+        first = COMPONENTS/(FIRST_FLASH_NAME+'.zip')
+        with zipfile.ZipFile(first) as z:
+            assert z.testzip() is None
+            for name in z.namelist():
+                assert name.startswith(FIRST_FLASH_NAME+'/')
+                rel = Path(name).relative_to(FIRST_FLASH_NAME)
+                assert '..' not in rel.parts and not rel.is_absolute()
+                dest = stage/'First-Flash'/rel
+                dest.parent.mkdir(parents=True,exist_ok=True)
+                dest.write_bytes(z.read(name))
+        assert (stage/'First-Flash/factory.bin').read_bytes() == (COMPONENTS/FACTORY).read_bytes()
         guide=(ROOT/'docs/delivery/README-FIRST.zh-CN.md').read_text().replace('@HOST_VERSION@',HOST_VERSION).replace('@TERMINAL_VERSION@',TERMINAL_VERSION).replace('@BUNDLE_NAME@',BUNDLE_NAME)
         (stage/'README-FIRST.zh-CN.md').write_text(guide)
         for name in USER_DOCS:
@@ -83,7 +95,7 @@ try {
         assert 'PASS' in (LOGS/f'terminal-{TERMINAL_VERSION}-check.log').read_text()
         copy('docs/VALIDATION.zh-CN.md','VERIFIED.zh-CN.md')
         (win/'FILES.json').write_text(json.dumps([{'path':p.name,'sha256':sha(p.read_bytes())} for p in sorted(win.iterdir()) if p.is_file()],indent=2)+'\n')
-        (stage/'RELEASE.json').write_text(json.dumps({'host':HOST_VERSION,'fpk':HOST_VERSION,'terminal':TERMINAL_VERSION,'web_port':8787,'maintainer':'Dream','distributor':'Dream','firmware':FIRMWARE_ID,'offset':'0x10000','firmware_sha256':sha(fw),'debian_sha256':sha(deb.read_bytes()),'fan_control':'0–100% manual/temperature curves; enabled curves resume on service start; stop restores baseline; physical validation pending','physical_validation_pending':True},indent=2)+'\n')
+        (stage/'RELEASE.json').write_text(json.dumps({'host':HOST_VERSION,'fpk':HOST_VERSION,'terminal':TERMINAL_VERSION,'web_port':8787,'maintainer':'Dream','distributor':'Dream','firmware':FIRMWARE_ID,'offset':'0x10000','firmware_sha256':sha(fw),'first_flash':{'folder':'First-Flash','image':'factory.bin','offset':'0x0','erase_all':True,'sha256':sha((stage/'First-Flash/factory.bin').read_bytes()),'physical_verified':False},'debian_sha256':sha(deb.read_bytes()),'fan_control':'0–100% manual/temperature curves; enabled curves resume on service start; stop restores baseline; physical validation pending','physical_validation_pending':True},indent=2)+'\n')
         for sidecar in stage.rglob('*.sha256'):
             digest,name=sidecar.read_text().strip().split('  ',1)
             assert sha((sidecar.parent/name).read_bytes())==digest,name
@@ -91,7 +103,7 @@ try {
         release_data=json.loads(release_file.read_text())
         release_data.update(release_metadata())
         release_file.write_text(json.dumps(release_data,indent=2)+'\n')
-        check_links([p for folder in ('Documentation','Debian','fnOS','Terminal') for p in (stage/folder).glob('*.md')], stage)
+        check_links([p for folder in ('Documentation','Debian','fnOS','Terminal','First-Flash') for p in (stage/folder).glob('*.md')], stage)
         entries=[{'path':p.relative_to(stage).as_posix(),'sha256':sha(p.read_bytes())} for p in sorted(stage.rglob('*')) if p.is_file()]
         (stage/'FILES.json').write_text(json.dumps(entries,indent=2)+'\n')
         (stage/'SHA256SUMS.txt').write_text(''.join(sha(p.read_bytes())+'  '+p.relative_to(stage).as_posix()+'\n' for p in sorted(stage.rglob('*')) if p.is_file() and p.name!='SHA256SUMS.txt'))

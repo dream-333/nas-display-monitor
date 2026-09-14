@@ -5,6 +5,7 @@
 | 组件 | 来源、版本与许可位置 |
 |---|---|
 | LILYGO AMOLED 板级驱动 / 官方资料 | `src/firmware/lib/amoled/LICENSE`、`third_party/reference/amoled/`、`hardware/case/official/LICENSE` |
+| Arduino-ESP32 / ESP-IDF 引导与 OTA 初始化 | `assets/UI5.1/BOOT-SOURCES.json` 记录 Arduino-ESP32 2.0.14 / ESP-IDF 4.4.6 来源；`assets/UI5.1/Licenses/Arduino-ESP32.txt`、`ESP-IDF.txt` 保留许可 |
 | TFT_eSPI、ArduinoJson | `src/firmware/platformio.ini` 锁版本，`third_party/licenses/` 与 `assets/UI5.1/Licenses/` 保留许可 |
 | 屏幕字体 | `src/firmware/assets/fonts/LICENSE.txt`、`assets/UI5.1/Licenses/Dream-UI-Sans.txt` |
 | it87 扩展驱动 | `hardware/drivers/it87/SOURCE.json` 固定提交；`source/COPYING`、`source/SHA256SUMS`，保留对应 GPL 源码 |

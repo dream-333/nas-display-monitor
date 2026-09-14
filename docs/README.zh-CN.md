@@ -11,6 +11,7 @@
 | 设置自动、手动百分比与温度曲线 | [风扇调速](FANS.zh-CN.md) |
 | 查看驱动准备状态与主板支持边界 | [驱动准备](DRIVERS.zh-CN.md) |
 | 连接、操作与升级 AMOLED 屏幕 | [屏幕使用](DISPLAY.zh-CN.md) |
+| 全新屏幕首次完整烧录 | [首次烧录](FIRST-FLASH.zh-CN.md) |
 | 安装和使用网页 SSH 终端 | [NAS Terminal](TERMINAL.zh-CN.md) |
 | 排查 FN Connect 与 IPv6 访问 | [远程访问](REMOTE-ACCESS.zh-CN.md) |
 | 打印与装配外壳 | [V7 外壳说明](../hardware/case/full-case-v7-slide/README.zh-CN.md) |

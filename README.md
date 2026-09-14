@@ -2,7 +2,7 @@
 
 Linux / fnOS 实时监控、风扇调速与 LILYGO T-Display-S3 AMOLED 状态屏。开发者 / 发布者：**Dream**。
 
-NAS Display **1.5.1** · NAS Terminal **1.0.2** · AMOLED **UI5.1** · 外壳 **V7** · 交付修订 **r4**。
+NAS Display **1.5.1** · NAS Terminal **1.0.2** · AMOLED **UI5.1** · 外壳 **V7** · 交付修订 **r5**。
 
 ## 从这里开始
 
@@ -11,6 +11,7 @@ NAS Display **1.5.1** · NAS Terminal **1.0.2** · AMOLED **UI5.1** · 外壳 **
 - 安装：[交付文件](dist/README.zh-CN.md) · [安装说明](docs/INSTALL.zh-CN.md)。Debian 与 FPK 二选一，网页端口 8787，没有屏幕也能实时监控。
 - 使用：[传感器](docs/SENSORS.zh-CN.md) · [风扇曲线](docs/FANS.zh-CN.md) · [屏幕](docs/DISPLAY.zh-CN.md) · [终端](docs/TERMINAL.zh-CN.md)。
 - 开发：[构建与验证](docs/BUILD.zh-CN.md) · [目录约定](docs/REPOSITORY-LAYOUT.zh-CN.md) · [验证范围](docs/VALIDATION.zh-CN.md)。
+- 新屏首次烧录：[完整烧录说明](docs/FIRST-FLASH.zh-CN.md)。首次烧录清空配置；已有设备使用应用升级。
 - 机械：[V7 模型与打印](hardware/case/full-case-v7-slide/README.zh-CN.md)。
 
 ## 功能

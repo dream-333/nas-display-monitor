@@ -61,7 +61,7 @@ PLATFORMIO_CORE_DIR="$PWD/.platformio" .venv/bin/pio run -d src/firmware
 .venv/bin/python tools/render_ui_preview.py
 ```
 
-PlatformIO 中的框架和库已锁版本；首次会下载工具链。发布始终使用 `assets/UI5.1/` 已验证的固件字节，重新编译的固件不自动替换发布输入。预览在 `.build/previews/`，构建在 `src/firmware/.pio/`。
+PlatformIO 中的框架和库已锁版本；首次会下载工具链。发布使用 `assets/UI5.1/` 固定应用和引导输入；`tools/package_firmware.py` 离线校验 ESP 镜像、分区和各段地址，生成 First-Flash ZIP 与 factory.bin。引导来源见该目录 BOOT-SOURCES.json；首次烧录真实启动尚未验收。发布保留既有 UI5.1 应用字节，重新编译的固件不自动替换发布输入。预览在 `.build/previews/`，构建在 `src/firmware/.pio/`。
 
 需要重做字模、机械模型或预览时再安装：
 

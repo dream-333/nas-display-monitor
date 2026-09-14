@@ -1,0 +1,17 @@
+{
+  "board": "LILYGO T-Display-S3 AMOLED non-touch 1.91 inch",
+  "chip": "esp32s3",
+  "flash_size": 16777216,
+  "platform": "espressif32@6.5.0",
+  "framework": "framework-arduinoespressif32@3.20014.231204 (Arduino-ESP32 2.0.14)",
+  "esptool": "4.5.1",
+  "framework_source": "https://github.com/espressif/arduino-esp32/tree/2.0.14",
+  "idf_source": "https://github.com/espressif/esp-idf/tree/v4.4.6",
+  "bootloader_elf": "tools/sdk/esp32s3/bin/bootloader_qio_80m.elf",
+  "bootloader_elf_sha256": "a4e9fefa26d18ba57440e65ef7745e0f44545ca06156dccb666290651614211a",
+  "boot_app0_source": "tools/partitions/boot_app0.bin",
+  "partitions_source": "tools/partitions/default_16MB.csv",
+  "build_command": "PLATFORMIO_CORE_DIR=\"$PWD/.platformio\" .venv/bin/pio run -d src/firmware",
+  "application": "Existing UI5.1 firmware.bin retained byte-for-byte; build partitions.bin matches retained partitions.bin",
+  "physical_first_flash_verified": false
+}
