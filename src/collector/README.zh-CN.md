@@ -11,7 +11,7 @@ python3 collect.py --diagnose
 python3 collect.py --count 3 --interval 2
 ```
 
-首次独立配置可运行 `python3 send.py --init`，会自动发现网卡和硬盘、GPU 使用 auto，并创建私有 config.json；已有文件拒绝覆盖。按 [屏幕说明](../../docs/DISPLAY.zh-CN.md) 配置屏幕 Wi-Fi 地址和 token，然后运行 `python3 send.py`。USB 发送请使用 Debian 网页上位机。
+首次独立配置可运行 `python3 send.py --init`，会自动发现网卡和硬盘、GPU 使用 auto，并创建私有 config.json；已有文件拒绝覆盖。按 [屏幕说明](../../docs/DISPLAY.zh-CN.md) 配置屏幕 Wi-Fi 地址和 UDP 端口（无需配对码；屏幕需升级免配对固件），然后运行 `python3 send.py`。USB 发送请使用 Debian 网页上位机。
 
 通用 CPU 温度为 cpu_temp_c，GPU 温度为 temperature_c；原 cpu_tctl_c / edge_c 仅保留对应 AMD 传感器语义。没有独立 GPU 温度时不复用 CPU 温度，不可用指标输出 null。GPU 占用率优先使用 gpu_busy_percent；Intel i915 还支持原生 PMU 采集，取最忙引擎的百分比。
 

@@ -59,7 +59,7 @@ def main():
                 cfg = default_config()
                 if args.import_config:
                     old = json.loads(args.import_config.read_text())
-                    if not isinstance(old, dict) or set(old) - CONFIG_KEYS:
+                    if not isinstance(old, dict) or set(old) - (CONFIG_KEYS | {'token'}):
                         raise ValueError('旧配置包含不支持的字段。')
                     cfg.update(old)
                     cfg['transport'] = old.get('transport', 'udp')

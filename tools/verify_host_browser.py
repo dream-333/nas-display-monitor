@@ -77,8 +77,8 @@ def main():
                     expect(page.locator('#hardware-message')).to_contain_text('正在编译驱动')
                     assert page.locator('#hardware-setup img').count() == 0
                     expect(page.locator('#cpu')).not_to_have_text('--')
-                    assert page.locator('#token').input_value() == cfg['token']
-                    assert page.locator('#token').get_attribute('type') == 'password'
+                    assert page.locator('#token').count() == 0
+                    assert page.locator('#show-token').count() == 0
                     if not args.no_screenshots: page.screenshot(path=str(previews / 'host-web-overview.png'), full_page=True)
                     # Fixture rendering: never writes hardware or settings.
                     page.evaluate("""updateFans({fans:[
@@ -105,6 +105,18 @@ def main():
                     expect(page.locator('#fan-note')).to_contain_text('未暴露')
                     expect(page.locator('#fan-controls')).to_be_hidden()
                     page.locator('.nav[data-tab=settings]').click()
+                    # Import an old config with an unusable pairing value: it is discarded.
+                    legacy = dict(cfg, display_ip='127.0.0.1', token='ignored-legacy-code')
+                    for key in ('transport', 'enabled', 'usb_port'):
+                        legacy.pop(key, None)
+                    page.locator('#import-config').set_input_files({
+                        'name': 'legacy.json', 'mimeType': 'application/json',
+                        'buffer': json.dumps(legacy).encode()})
+                    expect(page.locator('#toast')).to_contain_text('旧配置已填入')
+                    expect(page.locator('#transport')).to_have_value('udp')
+                    expect(page.locator('#display-ip')).to_have_value('127.0.0.1')
+                    expect(page.locator('#enabled')).not_to_be_checked()
+                    assert page.locator('#token').count() == 0
                     page.locator('#transport').select_option('udp')
                     page.locator('#display-ip').fill('127.0.0.1')
                     page.locator('#interval').fill('1')
@@ -115,6 +127,7 @@ def main():
                     page.locator('#cpu-sensor').select_option(selected_cpu)
                     page.locator('#config-form button[type=submit]').click()
                     expect(page.locator('#toast')).to_have_text('配置已保存')
+                    assert 'token' not in json.loads((state / 'config.json').read_text())
                     assert json.loads((state / 'config.json').read_text())['interval'] == 1
                     assert json.loads((state / 'config.json').read_text())['cpu_sensor'] == selected_cpu
                     page.reload()

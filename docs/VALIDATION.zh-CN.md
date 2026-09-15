@@ -1,5 +1,7 @@
 # 当前交付验证范围
 
+以下为已发布 r5 的验证范围。1.5.2 的变更与验证记录见 [变更摘要](CHANGELOG.zh-CN.md)。
+
 适用 NAS Display 1.5.1、NAS Terminal 1.0.2、AMOLED UI5.1、外壳 V7，交付修订 r5。
 
 完整检查入口是 tools/check_release.py；源码交付检查是 tools/verify_source.py。每次运行生成 .build/logs，日志不随包分发，也不作为永久构建输入。

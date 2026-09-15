@@ -42,12 +42,13 @@ inline bool decodeMetrics(JsonObjectConst o,Metrics &result) {
   }
   result=next;return true;
 }
-inline bool decodePacket(const char *buffer,size_t length,const char *token,Metrics &result) {
+inline bool decodePacket(const char *buffer,size_t length,Metrics &result) {
   if(length>1024) return false;
   StaticJsonDocument<3072> doc;
   if(deserializeJson(doc,buffer,length))return false;
   JsonObjectConst o=doc.as<JsonObjectConst>();
-  if(!o["v"].is<int>()||o["v"].as<int>()!=1||!o["token"].is<const char*>()||strcmp(token,o["token"].as<const char*>()))return false;
+  // Ignore legacy token fields; keep USB framing separate from UDP samples.
+  if(!o["v"].is<int>()||o["v"].as<int>()!=1||o.containsKey("kind")||o.containsKey("seq"))return false;
   Metrics next;
   if(!decodeMetrics(o,next))return false;
   result=next;

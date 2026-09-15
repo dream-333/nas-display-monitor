@@ -2,7 +2,9 @@
 
 Linux / fnOS 实时监控、风扇调速与 LILYGO T-Display-S3 AMOLED 状态屏。开发者 / 发布者：**Dream**。
 
-NAS Display **1.5.1** · NAS Terminal **1.0.2** · AMOLED **UI5.1** · 外壳 **V7** · 交付修订 **r5**。
+已发布：NAS Display **1.5.1** · NAS Terminal **1.0.2** · AMOLED **UI5.1** · 外壳 **V7** · 交付修订 **r5**。
+
+开发中：NAS Display **1.5.2** 移除 UDP 配对码；Wi-Fi 使用者须先升级免配对屏幕固件，再升级主机。现有 Release 的 UI5.1 固件仍使用配对码，详见 [屏幕升级说明](docs/DISPLAY.zh-CN.md)。
 
 ## 从这里开始
 

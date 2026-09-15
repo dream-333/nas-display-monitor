@@ -11,6 +11,12 @@ bool uiDirty=false;
 Key keys[2]; History history;
 const uint32_t idleSeconds[]={0,60,300,900};
 bool freshData(){return haveData&&millis()-receivedAt<STALE_MS&&(usbData||WiFi.status()==WL_CONNECTED);}
+const char *connectionStatus(){
+  if(usbData)return freshData()?"USB LIVE":"USB STALE";
+  if(setupMode)return "SETUP AP";
+  if(WiFi.status()!=WL_CONNECTED)return "OFFLINE";
+  return freshData()?"UDP LIVE":haveData?"UDP STALE":"WAIT DATA";
+}
 void touchSettings(){uiDirty=true;saveAt=millis();}
 void persistUi(){prefs.putUChar("skin",skin);prefs.putUChar("page",page);prefs.putUChar("light",brightness);prefs.putUChar("idle",idleChoice);uiDirty=false;}
 void screenPower(bool on){screenOff=!on;lcd_setBrightness(on?brightness*255/100:0);}
@@ -33,7 +39,7 @@ void uiTop(const String &title,bool fresh) {
   uint16_t c=themeColor();
   canvas.fillRect(18,12,2,12,c);canvas.fillRect(23,14,2,8,c);canvas.fillRect(28,17,2,4,c);
   uiText(39,25,title,16,INK);
-  String state=fresh?(usbData?"USB LIVE":"LIVE"):haveData?"STALE":WiFi.status()!=WL_CONNECTED&&!usbData?"OFFLINE":"WAIT";
+  String state=connectionStatus();
   uint16_t status=fresh?c:SOFT;
   int x=518-uiWidth(state,16);
   canvas.fillRoundRect(x-14,15,5,5,2,status);uiText(518,25,state,16,status,2);

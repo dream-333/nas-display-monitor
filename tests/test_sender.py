@@ -27,6 +27,9 @@ class SenderTests(unittest.TestCase):
         self.assertLess(len(wire), 1024)
         self.assertEqual((d['d1'], d['d2'], d['gpu']), (41, 46, 97))
         self.assertNotIn('memory_busy_percent', d)
+        self.assertNotIn('token', d)
+        without_token = {k: v for k, v in cfg.items() if k != 'token'}
+        self.assertEqual(send.packet(sample, without_token), wire)
         sample['gpu'] = []
         sample['nvme'] = []
         sample['network'] = {}
@@ -72,13 +75,19 @@ class SenderTests(unittest.TestCase):
             cfg=Path(tmp)/'config.json'
             subprocess.run([sys.executable,str(ROOT/'src/collector/send.py'),'--init','--config',str(cfg)],check=True,capture_output=True)
             self.assertEqual(cfg.stat().st_mode & 0o777,0o600)
-            d=json.loads(cfg.read_text());d.update(display_ip='127.0.0.1',port=server.getsockname()[1],interface=next(iter(collect.network())),interval=.2)
+            d=json.loads(cfg.read_text());self.assertNotIn('token', d);d.update(display_ip='127.0.0.1',port=server.getsockname()[1],interface=next(iter(collect.network())),interval=.2)
             cfg.write_text(json.dumps(d))
             with subprocess.Popen([sys.executable,str(ROOT/'src/collector/send.py'),'--config',str(cfg),'--count','1']) as proc:
                 wire,_=server.recvfrom(2048)
                 self.assertEqual(proc.wait(timeout=10),0)
-            self.assertEqual(json.loads(wire)['token'],d['token'])
+            self.assertNotIn('token', json.loads(wire))
             self.assertLess(len(wire),1024)
+            d['token'] = 'ignored-legacy-code'
+            cfg.write_text(json.dumps(d))
+            with subprocess.Popen([sys.executable,str(ROOT/'src/collector/send.py'),'--config',str(cfg),'--count','1']) as proc:
+                legacy_wire,_=server.recvfrom(2048)
+                self.assertEqual(proc.wait(timeout=10),0)
+            self.assertNotIn('token', json.loads(legacy_wire))
             result=subprocess.run([sys.executable,str(ROOT/'src/collector/send.py'),'--init','--config',str(cfg)],capture_output=True)
             self.assertNotEqual(result.returncode,0)
             self.assertEqual(json.loads(cfg.read_text()),d)

@@ -25,12 +25,16 @@ import collect
 import send
 from usb_link import UsbLink, TransferCancelled
 
-VERSION = '1.5.1'
+VERSION = '1.5.2'
 PASSWORD_ROUNDS = 600_000
-CONFIG_KEYS = {'display_ip', 'port', 'token', 'interface', 'interval', 'gpu_device', 'disks', 'enabled', 'transport', 'usb_port', 'sys_sensor', 'cpu_sensor'}
+CONFIG_KEYS = {'display_ip', 'port', 'interface', 'interval', 'gpu_device', 'disks', 'enabled', 'transport', 'usb_port', 'sys_sensor', 'cpu_sensor'}
 
 
 def validate_config(value):
+    # Legacy pairing codes are accepted on import but never retained or transmitted.
+    if isinstance(value, dict):
+        value = dict(value)
+        value.pop('token', None)
     if isinstance(value, dict) and 'cpu_sensor' not in value:
         value = dict(value, cpu_sensor='auto')
     if isinstance(value, dict) and 'sys_sensor' not in value:
@@ -61,8 +65,6 @@ def validate_config(value):
         raise ValueError('UDP 端口必须是 1–65535 的整数。')
     if type(cfg['interval']) not in (int, float) or not math.isfinite(cfg['interval']) or not .2 <= cfg['interval'] <= 5:
         raise ValueError('采集间隔必须是 0.2–5 秒。')
-    if not isinstance(cfg['token'], str) or not re.fullmatch(r'[0-9a-f]{32}', cfg['token']):
-        raise ValueError('配对码必须是 32 位小写十六进制字符，与屏幕保持一致。')
     for key, limit in [('interface', 32), ('gpu_device', 100)]:
         if not isinstance(cfg[key], str) or len(cfg[key]) > limit or any(c.isspace() or ord(c) < 32 for c in cfg[key]):
             raise ValueError('网卡或 GPU 标识格式错误。')
@@ -79,7 +81,7 @@ def default_config():
     # Prefer hardware interfaces; never sum a bridge and its underlying port.
     physical = [n for n in names if (Path('/sys/class/net') / n / 'device').exists()]
     disks = [d['model'] for d in collect.temperatures()['nvme'] if d.get('model')]
-    return {'display_ip': '', 'port': 44445, 'token': secrets.token_hex(16),
+    return {'display_ip': '', 'port': 44445,
             'interface': next(iter(physical or names), ''), 'interval': 2,
             'gpu_device': 'auto', 'sys_sensor': 'auto', 'cpu_sensor': 'auto',
             'disks': (disks + ['', ''])[:2], 'enabled': False, 'transport': 'usb', 'usb_port': 'auto'}
@@ -316,7 +318,6 @@ class Monitor:
         result['hardware_setup'] = hardware_status()
         if sample:
             metrics = json.loads(send.packet(sample, cfg))
-            metrics.pop('token')
             metrics.pop('v')
             result['metrics'] = metrics
             gpu = send.select_gpu(sample, cfg)

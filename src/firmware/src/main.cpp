@@ -17,7 +17,7 @@ TFT_eSprite canvas(&tft);
 WiFiUDP udp;
 WebServer web(80);
 Preferences prefs;
-String ssid, password, token, apPassword;
+String ssid, password, apPassword;
 bool setupMode=false, haveData=false, infoPage=false, usbData=false;
 uint32_t receivedAt=0, redrawAt=0, reconnectAt=0, heartbeatAt=0;
 const char *bootStage="starting";
@@ -60,8 +60,8 @@ void draw() {
   else if(infoPage) {
     header("NAS / CONNECTION","INFO",CYAN);
     settingRow(43,"CONNECTION",usbData?String("USB-C"):WiFi.localIP().toString());
-    settingRow(93,usbData?"PAIRING":"UDP PORT",usbData?String("NOT REQUIRED"):String(PORT));
-    settingRow(143,"STATUS",usbData?(freshData()?"USB LIVE":"USB STALE"):setupMode?"SETUP AP":WiFi.status()==WL_CONNECTED?"CONNECTED":"RECONNECTING");
+    settingRow(93,usbData?"TRANSPORT":"UDP PORT",usbData?String("USB CDC"):String(PORT));
+    settingRow(143,"STATUS",connectionStatus());
     textAt(14,207,"A / B: dashboard",MUTED);
     textAt(522,207,"Hold A: settings",MUTED,2,1,TR_DATUM);
   } else if(setupMode&&!usbData) {
@@ -76,25 +76,20 @@ void draw() {
 
   lcd_PushColors(0,0,536,240,(uint16_t*)canvas.getPointer());
 }
-bool validToken(const String &s) {
-  if(s.length()!=32) return false;
-  for(unsigned i=0;i<s.length();++i) if(!((s[i]>='0'&&s[i]<='9')||(s[i]>='a'&&s[i]<='f'))) return false;
-  return true;
-}
 void startSetup() {
   setupMode=true; WiFi.mode(WIFI_AP);
   char pw[17]; snprintf(pw,sizeof(pw),"%08lx%08lx",(unsigned long)esp_random(),(unsigned long)esp_random());
   apPassword=pw;
   stage(WiFi.softAP("NAS-Display-Setup",apPassword.c_str()) ? "setup AP started (192.168.4.1)" : "ERROR: setup AP failed");
   web.on("/",HTTP_GET,[](){
-    web.send(200,"text/html; charset=utf-8",R"HTML(<!doctype html><meta name="viewport" content="width=device-width"><title>NAS Display</title><style>body{font:18px sans-serif;max-width:440px;margin:30px auto;padding:16px}input,button{box-sizing:border-box;width:100%;padding:12px;margin:8px 0}</style><h2>NAS 状态屏设置</h2><form method="post" action="/save"><label>2.4 GHz Wi-Fi 名称<input name="ssid" maxlength="32" required></label><label>Wi-Fi 密码<input name="password" type="password" maxlength="63"></label><label>NAS 配对码（config.json 中的 token）<input name="token" pattern="[0-9a-f]{32}" minlength="32" maxlength="32" required></label><button>保存并重启</button></form>)HTML");
+    web.send(200,"text/html; charset=utf-8",R"HTML(<!doctype html><meta name="viewport" content="width=device-width"><title>NAS Display</title><style>body{font:18px sans-serif;max-width:440px;margin:30px auto;padding:16px}input,button{box-sizing:border-box;width:100%;padding:12px;margin:8px 0}</style><h2>NAS 状态屏设置</h2><form method="post" action="/save"><label>2.4 GHz Wi-Fi 名称<input name="ssid" maxlength="32" required></label><label>Wi-Fi 密码<input name="password" type="password" maxlength="63"></label><button>保存并重启</button></form>)HTML");
   });
   web.on("/save",HTTP_POST,[](){
-    String s=web.arg("ssid"),p=web.arg("password"),t=web.arg("token");
-    if(!s.length()||s.length()>32||(p.length()&&(p.length()<8||p.length()>63))||!validToken(t)) {
-      web.send(400,"text/plain; charset=utf-8","请检查 Wi-Fi 名称、密码与32位配对码。"); return;
+    String s=web.arg("ssid"),p=web.arg("password");
+    if(!s.length()||s.length()>32||(p.length()&&(p.length()<8||p.length()>63))) {
+      web.send(400,"text/plain; charset=utf-8","请检查 Wi-Fi 名称和密码。"); return;
     }
-    prefs.putString("ssid",s); prefs.putString("password",p); prefs.putString("token",t);
+    prefs.putString("ssid",s); prefs.putString("password",p);
     web.send(200,"text/plain; charset=utf-8","已保存，即将重启。连接失败时长按 A 进入设置，再选择 RESET WI-FI 并确认。");
     delay(800); ESP.restart();
   });
@@ -106,7 +101,7 @@ void receivePacket() {
   char buffer[1025]; int n=udp.read(buffer,1024); if(n<=0)return; buffer[n]=0;
   if(usbData&&freshData())return; // Recent USB data takes priority over LAN packets.
   Metrics next;
-  if(!decodePacket(buffer,n,token.c_str(),next)) return;
+  if(!decodePacket(buffer,n,next)) return;
   stats=next;haveData=true;usbData=false;receivedAt=millis();
 }
 void receiveUsb() {
@@ -143,14 +138,14 @@ void setup() {
   }
   canvas.setSwapBytes(true);
   stage("sprite allocated; loading settings");
-  prefs.begin("nas-display",false);ssid=prefs.getString("ssid","");password=prefs.getString("password","");token=prefs.getString("token","");
+  prefs.begin("nas-display",false);ssid=prefs.getString("ssid","");password=prefs.getString("password","");
   skin=prefs.getUChar("skin",0)%3;page=prefs.getUChar("page",0)%4;
   // UI4 colored layouts become the approved mint design; keep MONO preference.
   // Once migrated, all three UI5 palette choices persist normally.
   if(prefs.getUChar("ui_version",4)<5){skin=skin==1?1:0;prefs.putUChar("skin",skin);prefs.putUChar("ui_version",5);}
   brightness=prefs.getUChar("light",80);if(brightness<20||brightness>100||brightness%20)brightness=80;
   idleChoice=prefs.getUChar("idle",0)%4;screenPower(true);lastActivity=millis();
-  if(!ssid.length()||!validToken(token))startSetup();
+  if(!ssid.length())startSetup();
   else{WiFi.mode(WIFI_STA);WiFi.setAutoReconnect(true);WiFi.begin(ssid.c_str(),password.c_str());}
   draw();
   stage("setup complete; entering loop");
@@ -175,7 +170,7 @@ void loop() {
     if(!udpReady) udpReady=udp.begin(PORT)==1;
     if(udpReady) receivePacket();
   } else {
-    if(udpReady){udp.stop();udpReady=false;if(!usbData)haveData=false;}
+    if(udpReady){udp.stop();udpReady=false;}
     if(now-reconnectAt>=15000){reconnectAt=now;WiFi.reconnect();}
   }
   if(now-redrawAt>=500){redrawAt=now;draw();}

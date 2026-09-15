@@ -5,7 +5,7 @@
 int main(){
   const std::string p=R"({"kind":"nas-display-sample","v":1,"seq":123,"cpu":5,"ct":54,"mem":25,"gpu":97,"gt":51,"d1":41,"d2":46,"rx":1000,"tx":null})";
   Metrics m{};uint32_t seq=0;assert(decodeUsbPacket(p.c_str(),p.size(),m,seq));assert(seq==123&&m.gpu==97&&isnan(m.tx));
-  assert(!decodePacket(p.c_str(),p.size(),"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",m)); // Never accept USB authentication bypass over UDP.
+  assert(!decodePacket(p.c_str(),p.size(),m)); // USB framing must not be mistaken for a plain UDP sample.
   for(auto pair:{std::make_pair(std::string("\"seq\":123"),std::string("\"seq\":-1")),
                  std::make_pair(std::string("\"seq\":123"),std::string("\"seq\":1.2")),
                  std::make_pair(std::string("\"gpu\":97"),std::string("\"gpu\":101")),

@@ -96,7 +96,7 @@ service_port=8787
 checkport=true
 ctl_stop=true
 disable_authorization_path=true
-changelog=Dream 出品；修复飞牛账户默认组与服务组不同造成的风扇接口连接失败，细分通信错误提示。保持 8787 端口。
+changelog=Dream 出品；移除 UDP 配对码和网页输入，兼容导入旧配置。Wi-Fi 屏幕须先升级免配对固件，再升级本应用。保留网页登录认证、USB 确认和 8787 端口。
 ''')
         write('config/privilege', json.dumps({'defaults': {'run-as': 'root'}, 'username': APP, 'groupname': APP, 'join-groups': ['dialout']}, indent=2) + '\n')
         write('config/resource', '{}\n')

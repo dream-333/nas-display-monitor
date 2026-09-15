@@ -4,7 +4,6 @@ import argparse
 import json
 import math
 from pathlib import Path
-import secrets
 import socket
 import time
 import collect
@@ -37,7 +36,7 @@ def packet(sample, config):
         if matches: return None  # ambiguous legacy model: require explicit identity
         return metric(disks.get(key, {}).get('composite_c'))
 
-    data = {'v': 1, 'token': config['token'], 'cpu': metric(sample['cpu_used_percent']),
+    data = {'v': 1, 'cpu': metric(sample['cpu_used_percent']),
             'ct': metric(collect.select_cpu_temperature(sample, config.get('cpu_sensor', 'auto'))['value_c']), 'mem': metric(sample['memory']['used_percent']),
             'gpu': metric(gpu.get('busy_percent')), 'gt': metric(gpu.get('temperature_c', gpu.get('edge_c'))),
             'd1': chosen(models[0]),
@@ -64,7 +63,7 @@ def main():
     p.add_argument('--count', type=int, default=0)
     args = p.parse_args()
     if args.init:
-        cfg = {'display_ip': 'CHANGE_ME', 'port': 44445, 'token': secrets.token_hex(16),
+        cfg = {'display_ip': 'CHANGE_ME', 'port': 44445,
                'interface': next(iter(sorted(n for n in collect.network() if (Path('/sys/class/net') / n / 'device').exists())), next(iter(collect.network()), '')),
                'interval': 2, 'gpu_device': 'auto',
                'disks': ([d['model'] for d in collect.temperatures()['nvme']] + ['', ''])[:2]}
@@ -73,13 +72,11 @@ def main():
         with os.fdopen(fd, 'w') as f:
             json.dump(cfg, f, indent=2)
             f.write('\n')
-        print('Created', args.config, '- edit display_ip; enter token in display setup.')
+        print('Created', args.config, '- edit display_ip to match the screen Wi-Fi address.')
         return
     cfg = json.loads(args.config.read_text())
     import ipaddress
     ipaddress.IPv4Address(cfg['display_ip'])
-    if not isinstance(cfg['token'], str) or len(cfg['token']) != 32 or any(c not in '0123456789abcdef' for c in cfg['token']):
-        p.error('token must be 32 lowercase hex characters')
     interval = float(cfg.get('interval', 2))
     if not math.isfinite(interval) or not 0.2 <= interval <= 5 or args.count < 0:
         p.error('interval must be 0.2..5 seconds; count must be nonnegative')

@@ -1,6 +1,6 @@
 #pragma once
 #include "protocol.h"
-// Only native USB may call this decoder. UDP always goes through token validation.
+// USB framing requires kind and sequence for acknowledgements; UDP uses plain samples.
 inline bool decodeUsbPacket(const char *buffer,size_t length,Metrics &result,uint32_t &sequence) {
   if(length>1024)return false;
   StaticJsonDocument<3072> doc;

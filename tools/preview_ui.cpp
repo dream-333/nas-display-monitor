@@ -68,6 +68,14 @@ int main(int argc,char**argv){
  menuRow=3;handleKey(1,KeyEvent::Short);handleKey(1,KeyEvent::Short);assert(ESP.restarted&&prefs.removes==3);
  menuOpen=false;setupMode=true;usbData=true;page=0;handleKey(0,KeyEvent::Short);assert(page==1);setupMode=false;usbData=false;screenOff=true;page=0;handleKey(0,KeyEvent::Short);assert(!screenOff&&wakeGuard&&page==0);
  handleKey(1,KeyEvent::Short);assert(skin==1);wakeGuard=false;
+ haveData=false;usbData=false;WiFi.state=3;
+ assert(!strcmp(connectionStatus(),"WAIT DATA"));
+ haveData=true;receivedAt=tick;assert(!strcmp(connectionStatus(),"UDP LIVE"));
+ receivedAt=tick-STALE_MS;assert(!strcmp(connectionStatus(),"UDP STALE"));
+ WiFi.state=0;assert(!strcmp(connectionStatus(),"OFFLINE"));
+ WiFi.state=3;assert(!strcmp(connectionStatus(),"UDP STALE"));
+ usbData=true;assert(!strcmp(connectionStatus(),"USB STALE"));
+ receivedAt=tick;assert(!strcmp(connectionStatus(),"USB LIVE"));usbData=false;
  receivedAt=tick;assert(freshData());WiFi.state=0;assert(!freshData());usbData=true;assert(freshData());usbData=false;WiFi.state=3;receivedAt=tick-STALE_MS;assert(!freshData());receivedAt=tick;
  usbData=true;
  for(int i=0;i<60;i++){float v[]={float(50+10*sin(i*.2)),float(45+5*cos(i*.3)),42,float(2e6+1e6*sin(i*.15)),float(5e5+2e5*cos(i*.3)),41};history.push(v);}

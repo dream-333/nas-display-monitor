@@ -128,16 +128,16 @@ class HostTests(unittest.TestCase):
         self.assertEqual(self.client.post('/api/login', json={'password': PASSWORD}).status_code, 403)
         self.login()
         r = self.client.get('/api/config')
-        self.assertEqual(r.json['token'], self.cfg['token'])
+        self.assertNotIn('token', r.json)
         self.assertEqual(r.headers['Cache-Control'], 'no-store')
         self.assertIn("frame-ancestors 'none'", r.headers['Content-Security-Policy'])
-        self.assertNotIn(self.cfg['token'], self.client.get('/api/status').text)
+        self.assertNotIn('token', self.client.get('/api/status').json.get('metrics') or {})
         self.assertEqual(self.client.post('/api/config', json=self.cfg).status_code, 403)
         self.assertEqual(self.client.post('/api/config', data='{}', content_type='text/plain', headers={'X-CSRF-Token': self.csrf}).status_code, 415)
         self.assertEqual(self.post('logout', {}).status_code, 200)
         self.assertEqual(self.client.get('/api/status').status_code, 401)
 
-    def test_password_reset_revokes_other_sessions_and_preserves_pairing(self):
+    def test_password_reset_revokes_other_sessions_and_preserves_display_settings(self):
         self.login()
         other = self.app.test_client()
         self.login(other)
@@ -145,7 +145,7 @@ class HostTests(unittest.TestCase):
         self.assertEqual(self.post('password', {'current': 'wrong', 'new': '12345678'}).status_code, 400)
         self.assertEqual(self.post('password', {'current': PASSWORD, 'new': '12345678'}).status_code, 200)
         self.assertEqual(other.get('/api/config').status_code, 401)
-        self.assertEqual(self.settings.get()['token'], self.cfg['token'])
+        self.assertEqual(self.settings.get(), self.cfg)
         csrf = self.client.get('/api/session').json['csrf']
         self.assertEqual(self.post('login', {'password': '12345678'}, csrf=csrf).status_code, 200)
 
@@ -159,7 +159,7 @@ class HostTests(unittest.TestCase):
         self.login()
         bad_values = [('interval', float('nan')), ('interval', float('inf')), ('interval', True),
                       ('interval', .1), ('port', True), ('port', 0), ('enabled', 'yes'),
-                      ('token', 'not-a-token'), ('disks', 'two'), ('disks', ['', None]),
+                      ('disks', 'two'), ('disks', ['', None]),
                       ('transport', 'ftp'), ('usb_port', '/etc/passwd'), ('usb_port', '/dev/ttyS0'),
                       ('display_ip', '255.255.255.255'), ('display_ip', '224.0.0.1'), ('display_ip', 'example.com')]
         for key, value in bad_values:
@@ -170,13 +170,31 @@ class HostTests(unittest.TestCase):
         self.assertEqual(self.post('config', cfg).status_code, 400)
         cfg = self.settings.get();cfg.update(transport='udp', enabled=True, display_ip='')
         self.assertEqual(self.post('config', cfg).status_code, 400)
-        cfg = self.settings.get();cfg.update(interval=1, token='c' * 32)
+        cfg = self.settings.get();cfg.update(interval=1)
         self.assertEqual(self.post('config', cfg).status_code, 200)
         self.assertEqual(Settings(self.directory).get(), cfg)
         for name in ('config.json', 'auth.json'):
             self.assertEqual((self.directory / name).stat().st_mode & 0o777, 0o600)
         self.assertEqual(list(self.directory.glob('.*json-*')), [])
         self.assertEqual(self.client.post('/api/config', data=' ' * 40000, headers={'X-CSRF-Token': self.csrf, 'Content-Type': 'application/json'}).status_code, 413)
+
+    def test_legacy_token_is_ignored_without_changing_display_settings(self):
+        legacy = dict(self.cfg, token='legacy-pairing-value', enabled=True,
+                      transport='udp', display_ip='127.0.0.1')
+        atomic_json(self.directory / 'config.json', legacy)
+        expected = {k: v for k, v in legacy.items() if k != 'token'}
+        loaded = Settings(self.directory)
+        self.assertEqual(loaded.get(), expected)
+        self.assertIn('token', json.loads((self.directory / 'config.json').read_text()))
+        self.login()
+        for ignored in ('', 'not-a-token', None, 123):
+            with self.subTest(token=ignored):
+                self.assertEqual(self.post('config', dict(legacy, token=ignored)).status_code, 200)
+                self.assertEqual(self.client.get('/api/config').json, expected)
+                self.assertEqual(Settings(self.directory).get(), expected)
+                self.assertNotIn('token', json.loads((self.directory / 'config.json').read_text()))
+        self.assertIn('token', legacy)  # Normalization never mutates the caller.
+        self.assertEqual(self.post('config', dict(expected, unknown=True)).status_code, 400)
 
     def test_failed_save_keeps_old_config(self):
         cfg = self.settings.get();cfg['interval'] = 1
@@ -202,7 +220,7 @@ class HostTests(unittest.TestCase):
             self.assertEqual(before, (destination / 'config.json').read_bytes())
         self.assertEqual(destination.stat().st_mode & 0o777, 0o700)
         cfg = Settings(destination).get()
-        self.assertEqual(cfg['token'], 'd' * 32)
+        self.assertNotIn('token', cfg)
         self.assertEqual(cfg['transport'], 'udp')
         self.assertFalse(cfg['enabled'])
 
@@ -214,7 +232,7 @@ class HostTests(unittest.TestCase):
             self.monitor.start()
             data, _ = listener.recvfrom(2048)
             wire = json.loads(data)
-            self.assertEqual(wire['v'], 1);self.assertEqual(wire['token'], self.cfg['token'])
+            self.assertEqual(wire['v'], 1);self.assertNotIn('token', wire)
             self.assertLess(len(data), 1024)
             self.assertNotIn('token', self.monitor.status()['metrics'])
             self.assertFalse(self.monitor.status()['receiver_confirmed'])
