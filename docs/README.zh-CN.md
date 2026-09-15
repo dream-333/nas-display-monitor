@@ -7,6 +7,8 @@
 | 要做的事 | 文档 |
 |---|---|
 | 选择安装方式、升级、登录与管理服务 | [安装与运行](INSTALL.zh-CN.md) |
+| 无终端安装（按飞牛 Compose 界面） | [图形界面部署](DOCKER-GUI.zh-CN.md) |
+| 在铁牛 Debian NAS 上运行 Docker 镜像 | [Docker 部署](DOCKER.zh-CN.md) |
 | 理解 CPU、GPU、硬盘、SYS 与风扇读数 | [传感器与温度来源](SENSORS.zh-CN.md) |
 | 设置自动、手动百分比与温度曲线 | [风扇调速](FANS.zh-CN.md) |
 | 查看驱动准备状态与主板支持边界 | [驱动准备](DRIVERS.zh-CN.md) |

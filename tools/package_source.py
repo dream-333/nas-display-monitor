@@ -10,7 +10,7 @@ import stat
 import zipfile
 from release_config import ROOT, DIST, HOST_VERSION, TERMINAL_VERSION, FIRMWARE_VERSION, BUNDLE_NAME, release_metadata
 
-FILES = ('README.md', '.gitignore', 'requirements-dev.txt', 'requirements-design.txt',
+FILES = ('Dockerfile', '.dockerignore', 'compose.yaml', 'README.md', '.gitignore', 'requirements-dev.txt', 'requirements-design.txt',
          'THIRD-PARTY-NOTICES.md', 'assets/README.zh-CN.md', 'dist/README.zh-CN.md')
 TREES = ('src', 'tools', 'tests', 'docs', 'hardware', 'third_party', 'assets/UI5.1')
 BLOCKED = {'.git', '.venv', '.platformio', '.pio', '.build', '__pycache__',

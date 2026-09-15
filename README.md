@@ -11,6 +11,7 @@ Linux / fnOS 实时监控、风扇调速与 LILYGO T-Display-S3 AMOLED 状态屏
 完整导航见 [文档中心](docs/README.zh-CN.md)。
 
 - 安装：[交付文件](dist/README.zh-CN.md) · [安装说明](docs/INSTALL.zh-CN.md)。Debian 与 FPK 二选一，网页端口 8787，没有屏幕也能实时监控。
+- Docker：[铁牛 NAS 容器部署](docs/DOCKER.zh-CN.md)，提供无终端的 [Compose 图形界面部署](docs/DOCKER-GUI.zh-CN.md)，自动初始化、持久配置、风扇控制和 SMART 采集。
 - 使用：[传感器](docs/SENSORS.zh-CN.md) · [风扇曲线](docs/FANS.zh-CN.md) · [屏幕](docs/DISPLAY.zh-CN.md) · [终端](docs/TERMINAL.zh-CN.md)。
 - 开发：[构建与验证](docs/BUILD.zh-CN.md) · [目录约定](docs/REPOSITORY-LAYOUT.zh-CN.md) · [验证范围](docs/VALIDATION.zh-CN.md)。
 - 新屏首次烧录：[完整烧录说明](docs/FIRST-FLASH.zh-CN.md)。首次烧录清空配置；已有设备使用应用升级。

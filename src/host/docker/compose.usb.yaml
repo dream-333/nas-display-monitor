@@ -1,0 +1,9 @@
+# USB native CDC hotplug: /dev is shared, device access limited to ttyACM.
+services:
+  nas-display:
+    group_add:
+      - ${NAS_DISPLAY_USB_GID:-20}
+    device_cgroup_rules:
+      - 'c 166:* rw'
+    volumes:
+      - /dev:/dev

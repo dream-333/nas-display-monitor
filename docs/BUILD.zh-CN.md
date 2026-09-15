@@ -52,6 +52,10 @@ PYTHONDONTWRITEBYTECODE=1 .venv/bin/python tools/verify_source.py --export .buil
 
 package_release.py 要求当前版本检查日志；check_release.py 会重新生成，不能复用源码修改前的通过记录。文件、包内容和文档链接由检查工具验证。版本与交付修订由 tools/release_config.py 统一读取。
 
+## Docker 镜像
+
+针对当前铁牛 Debian x86_64 NAS，在根目录运行 `docker build -t nas-display:1.5.2 .`；多阶段构建使用固定基础镜像、仓库内校验摘要的应用依赖，以及 Debian 签名快照源中的 6.1.148-1 头文件和 GCC 12；编译 IT8613 模块后只将驱动及对应源码带入运行镜像。首次构建需联网访问快照源，运行时无需安装依赖。构建后通过 `tools/package_docker.py` 导出镜像导入 ZIP；无终端安装使用 `tools/package_docker_gui.py` 导出 Compose 项目 ZIP，内含完整运行环境与 FROM scratch 本地组装文件，不需要在 NAS 拉取基础镜像。部署及验证见 [Docker 说明](DOCKER.zh-CN.md)。运行配置使用 Docker 数据卷，镜像不包含本机账户和 Wi-Fi 配置。
+
 ## 固件与机械设计
 
 编译只生成本地输出，不自动烧录：

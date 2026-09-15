@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Read-only Linux NAS probe. Standard library only; outputs JSON lines."""
 import argparse
+import os
 import hashlib
 import csv
 import re
@@ -13,6 +14,9 @@ import time
 from storage import disk_stats
 from board import board_stats
 from intel_pmu import monitor as intel_monitor
+
+
+PROC_ROOT = Path(os.environ.get('NAS_DISPLAY_PROC_ROOT', '/proc'))
 
 
 def read(path):
@@ -270,7 +274,7 @@ def gpu_stats(drm_root=Path('/sys/class/drm'), nvidia_reader=None, hwmon_root=Pa
 
 
 def cpu_counters():
-    raw = read('/proc/stat')
+    raw = read(PROC_ROOT / 'stat')
     if not raw:
         raise RuntimeError('Cannot read /proc/stat; run on Linux NAS host')
     values = list(map(int, raw.splitlines()[0].split()[1:9]))
@@ -279,7 +283,7 @@ def cpu_counters():
 
 def memory():
     values = {}
-    for line in (read('/proc/meminfo') or '').splitlines():
+    for line in (read(PROC_ROOT / 'meminfo') or '').splitlines():
         key, value = line.split(':', 1)
         values[key] = int(value.strip().split()[0]) * 1024
     total, available = values.get('MemTotal'), values.get('MemAvailable')
@@ -290,7 +294,7 @@ def memory():
 
 def network():
     result = {}
-    for line in (read('/proc/net/dev') or '').splitlines():
+    for line in (read(PROC_ROOT / 'net/dev') or '').splitlines():
         if ':' not in line:
             continue
         name, raw = line.split(':', 1)

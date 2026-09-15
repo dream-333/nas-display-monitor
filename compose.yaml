@@ -1,0 +1,109 @@
+services:
+  nas-display:
+    image: nas-display:1.5.2
+    platform: linux/amd64
+    build: .
+    hostname: dream-nas
+    network_mode: host
+    restart: unless-stopped
+    stop_grace_period: 30s
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    environment:
+      NAS_DISPLAY_PORT: ${NAS_DISPLAY_PORT:-8787}
+      NAS_DISPLAY_HARDWARE_STATUS: /run/nas-display-driver/status.json
+      NAS_DISPLAY_PROC_ROOT: /host/proc
+      NAS_DISPLAY_FAN_SOCKET: /run/nas-display-fan/control.sock
+    volumes:
+      - driver-status:/run/nas-display-driver:ro
+      - data:/data
+      - fan-socket:/run/nas-display-fan:ro
+      - smart-cache:/run/nas-display-smart:ro
+      - /sys:/sys:ro
+      - /proc:/host/proc:ro
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+  driver:
+    image: nas-display:1.5.2
+    platform: linux/amd64
+    user: "0:0"
+    entrypoint: [python, /app/docker/driver_init.py]
+    network_mode: none
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [SYS_MODULE]
+    security_opt: [no-new-privileges:true, apparmor:unconfined]
+    environment:
+      NAS_DISPLAY_DRIVER_POLICY: ${NAS_DISPLAY_DRIVER_POLICY:-auto}
+    volumes:
+      - driver-status:/run/nas-display-driver
+      - /sys:/sys:ro
+    healthcheck:
+      test: [CMD, python, -c, "import json; d=json.load(open('/run/nas-display-driver/status.json')); assert d['state'] != 'checking'"]
+      interval: 3s
+      timeout: 5s
+      start_period: 30s
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+  fans:
+    depends_on:
+      driver:
+        condition: service_healthy
+    image: nas-display:1.5.2
+    platform: linux/amd64
+    user: "0:0"
+    entrypoint: [python, /app/fpk_fan.py]
+    network_mode: none
+    restart: unless-stopped
+    stop_grace_period: 30s
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [CHOWN]
+    security_opt: [no-new-privileges:true, apparmor:unconfined]
+    environment:
+      NAS_DISPLAY_FAN_ACCOUNT: nas-display
+      NAS_DISPLAY_FAN_STATE: /fan-state/fans/active.json
+      NAS_DISPLAY_FAN_SOCKET: /run/nas-display-fan/control.sock
+    volumes:
+      - fan-data:/fan-state
+      - fan-socket:/run/nas-display-fan
+      - /sys:/sys:rw
+    healthcheck:
+      test: [CMD, python, -c, "import socket; s=socket.socket(socket.AF_UNIX); s.settimeout(2); s.connect('/run/nas-display-fan/control.sock'); s.sendall(b'{\"action\":\"status\"}'+bytes([10])); assert s.recv(65536)"]
+      interval: 30s
+      timeout: 5s
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+  smart:
+    image: nas-display:1.5.2
+    platform: linux/amd64
+    user: "0:0"
+    entrypoint: [python, /app/docker/smart_loop.py]
+    network_mode: none
+    restart: unless-stopped
+    stop_grace_period: 90s
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [SYS_RAWIO]
+    security_opt: [no-new-privileges:true]
+    device_cgroup_rules:
+      - 'b *:* rw'
+    volumes:
+      - smart-cache:/run/nas-display-smart
+      - /sys:/sys:ro
+      - /dev:/dev:ro
+    healthcheck:
+      test: [CMD, python, -c, "from pathlib import Path; import time; assert time.time()-Path('/run/nas-display-smart/disks.json').stat().st_mtime < 180"]
+      interval: 60s
+      timeout: 5s
+      start_period: 90s
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+volumes:
+  driver-status:
+  data:
+  fan-data:
+  fan-socket:
+  smart-cache:
